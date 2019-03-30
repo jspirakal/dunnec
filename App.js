@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import FirebaseLogin from "./FirebaseLogin";
 import firebase from 'firebase'
-import { Root, Tabs } from './src/config/router';
-
+// import { Root, Tabs } from './src/config/router';
+import Router from './src/config/router'
 
   // Initialize Firebase
   var config = {
@@ -17,11 +17,10 @@ import { Root, Tabs } from './src/config/router';
 
 
 
-
 class App extends Component {
   render() {
     return (
-      <FirebaseLogin login={user => console.warn(user)}/>
+     <Router/>
     )
   }
 }
