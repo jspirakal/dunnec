@@ -10,7 +10,6 @@ target 'app' do
   pod 'FBSDKLoginKit', :git => 'https://github.com/facebook/facebook-objc-sdk.git'
   pod 'FBSDKShareKit', :git => 'https://github.com/facebook/facebook-objc-sdk.git'
   
-    
 
   # Pods for app
 
@@ -18,6 +17,12 @@ target 'app' do
     inherit! :search_paths
     # Pods for testing
     pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+
+    pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+    pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+    # pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler/ios'
 
   end
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import FirebaseLogin from "./FirebaseLogin";
 import firebase from 'firebase'
-
+import { Root, Tabs } from './src/config/router';
 
 
   // Initialize Firebase
