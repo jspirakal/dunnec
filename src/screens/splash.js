@@ -28,7 +28,7 @@ export default class Splash extends Component {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) 
             {
-             this.props.navigation.dispatch(resetToHome)
+                this.props.navigation.dispatch(resetToHome)
             }
             else
             {

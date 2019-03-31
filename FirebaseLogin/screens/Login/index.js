@@ -19,21 +19,34 @@ export default class Login extends Component {
     isLogin: false,
   };
   onLoginFacebook = () => {
-    console.warn()
+    // console.warn()
     
-    LoginManager.logInWithReadPermissions(["public_profile"]).then(
+    // LoginManager.logInWithReadPermissions(["public_profile"]).then(
+    //   function(result) {
+    //     if (result.isCancelled) {
+    //       console.log("Login cancelled");
+    //     } else {
+    //       console.log(
+    //         "Login success with permissions: " +
+    //           result.grantedPermissions.toString()
+    //       );
+    //     }
+    //   },
+    //   function(error) {
+    //     console.log("Login fail with error: " + error);
+    //   }
+    // );
+    LoginManager.logInWithReadPermissions(['public_profile']).then(
       function(result) {
         if (result.isCancelled) {
-          console.log("Login cancelled");
+          alert('Login was cancelled');
         } else {
-          console.log(
-            "Login success with permissions: " +
-              result.grantedPermissions.toString()
-          );
+          alert('Login was successful with permissions: '
+            + result.grantedPermissions.toString());
         }
       },
       function(error) {
-        console.log("Login fail with error: " + error);
+        alert('Login failed with error: ' + error);
       }
     );
  }
@@ -67,7 +80,8 @@ export default class Login extends Component {
     this.setState({ isLogin: true });
     Firebase.userLogin(email, password)
       .then(user => {
-        if(user) this.props.success(user);
+        if(user) 
+        // this.props.success(user);
         this.setState({ isLogin: false });
       });
   };

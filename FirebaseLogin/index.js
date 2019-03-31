@@ -16,16 +16,19 @@ export default class FirebaseLogin extends Component {
     this.setState({ currentScreen: screenName });
   };
 
-  userSuccessfullyLoggedIn = (user) => {
-    this.props.login(user);
-  };
+  // userSuccessfullyLoggedIn = (user) => {
+  //   this.props.login(user);
+  // };
 
   render() {
     let screenToShow;
 
     switch(this.state.currentScreen) {
       case 'login':
-        screenToShow = <Login change={this.changeScreen} success={this.userSuccessfullyLoggedIn}/>;
+        screenToShow = <Login change={this.changeScreen} 
+        // success={this.userSuccessfullyLoggedIn}
+
+        />;
         break;
       case 'register':
         screenToShow = <Register change={this.changeScreen} />;
@@ -54,9 +57,9 @@ export default class FirebaseLogin extends Component {
   }
 }
 
-FirebaseLogin.propTypes = {
-  login: PropTypes.func.isRequired,
-};
+// FirebaseLogin.propTypes = {
+//   login: PropTypes.func.isRequired,
+// };
 
 FirebaseLogin.defaultProps = {
   background: null,

@@ -4,14 +4,15 @@ import { List, ListItem } from 'react-native-elements';
 import { users } from '../config/data';
 
 class Feed extends Component {
-    onLearnMore = (user) => {
-        // this.props.navigation.navigate('Details', { ...user });
-    };
-
+    // onLearnMore = (user) => {
+    //     this.props.navigation.navigate('Details', { ...user });
+    // };
     render() {
         console.log(users)
         return (
-            <ScrollView>
+            <View style={{flex:1,justifyContent:'center',alignItems:'center' }} >
+
+            {/*  <ScrollView> */}
                  {/* Commented this put because there is no users object in your config file and this screen expectes
                     to receive a list of users in order to work well.  */}
                 {/* <List>
@@ -26,7 +27,10 @@ class Feed extends Component {
                         />
                     ))}
                 </List> */}
-            </ScrollView>
+            {/* </ScrollView> */}
+            <View><Text style={{fontSize:16, fontWeight:'bold'}} >It's feed Screen!</Text></View>
+            </View>
+
         );
     }
 }
