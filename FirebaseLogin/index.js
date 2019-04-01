@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { KeyboardAvoidingView, StyleSheet, ImageBackground } from 'react-native';
-import Login from './screens/Login';
+import Login from './screens/Login/index';
 import Register from './screens/Register';
 import ForgotPassword from './screens/ForgotPassword';
 import { w } from './api/Dimensions';
@@ -15,6 +15,9 @@ export default class FirebaseLogin extends Component {
   changeScreen = screenName => () => {
     this.setState({ currentScreen: screenName });
   };
+  componentDidMount(){
+    console.log(this.props.navigation)
+  }
 
   // userSuccessfullyLoggedIn = (user) => {
   //   this.props.login(user);
@@ -25,7 +28,7 @@ export default class FirebaseLogin extends Component {
 
     switch(this.state.currentScreen) {
       case 'login':
-        screenToShow = <Login change={this.changeScreen} 
+        screenToShow = <Login navigation={this.props.navigation} change={this.changeScreen} 
         // success={this.userSuccessfullyLoggedIn}
 
         />;

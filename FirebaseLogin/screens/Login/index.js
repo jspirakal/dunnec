@@ -1,55 +1,59 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, Image} from 'react-native';
+import { StyleSheet, View, AsyncStorage, TouchableOpacity, Text, Image} from 'react-native';
 import InputField from "../../components/InputField";
 import {w, h, totalSize} from '../../api/Dimensions';
 import GetStarted from './GetStarted';
 import Firebase from '../../api/Firebase';
-import { AcessToken, LoginManager, LoginButton } from 'react-native-fbsdk';
+import { StackActions, NavigationActions } from 'react-navigation';
+
+import { AccessToken, LoginManager} from 'react-native-fbsdk';
 
 const companyLogo = require('../../assets/er.png');
 const email = require('../../assets/email.png');
 const password = require('../../assets/password.png');
-
+const resetToHome = StackActions.reset({
+  index: 0,
+  actions: [NavigationActions.navigate({ routeName: 'Tabs' })],
+});
  
 export default class Login extends Component {
+  constructor(props){
+    super(props);
+  }
+  componentDidMount(){
+    console.log(this.props)
+  }
 
   state = {
     isEmailCorrect: false,
     isPasswordCorrect: false,
     isLogin: false,
   };
+  
   onLoginFacebook = () => {
-    // console.warn()
     
-    // LoginManager.logInWithReadPermissions(["public_profile"]).then(
-    //   function(result) {
-    //     if (result.isCancelled) {
-    //       console.log("Login cancelled");
-    //     } else {
-    //       console.log(
-    //         "Login success with permissions: " +
-    //           result.grantedPermissions.toString()
-    //       );
-    //     }
-    //   },
-    //   function(error) {
-    //     console.log("Login fail with error: " + error);
-    //   }
-    // );
     LoginManager.logInWithReadPermissions(['public_profile']).then(
-      function(result) {
+      (result) => {
         if (result.isCancelled) {
           alert('Login was cancelled');
         } else {
-          alert('Login was successful with permissions: '
-            + result.grantedPermissions.toString());
+          console.log(result);
+          AccessToken.getCurrentAccessToken().then(
+            (data) => {
+              if(data) {
+                AsyncStorage.setItem('fb-user',data.accessToken);
+                console.log(this.props)
+                this.props.navigation.dispatch(resetToHome)
+               }
+            })
         }
       },
-      function(error) {
+      (error) => {
         alert('Login failed with error: ' + error);
       }
     );
- }
+  }
+
 
   getStarted = () => {
     const email = this.email.getInputValue();
@@ -81,7 +85,7 @@ export default class Login extends Component {
     Firebase.userLogin(email, password)
       .then(user => {
         if(user) 
-        // this.props.success(user);
+        this.props.navigation.dispatch(resetToHome)
         this.setState({ isLogin: false });
       });
   };

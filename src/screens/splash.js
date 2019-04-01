@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase'
 
-import { View, StatusBar, Image } from 'react-native';
+import { View, AsyncStorage, StatusBar, Image } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 const resetToHome = StackActions.reset({
@@ -25,16 +25,23 @@ export default class Splash extends Component {
     }
 
     loadSplash(){
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) 
-            {
+        AsyncStorage.getItem('fb-user').then(u=>{
+            if(u){
                 this.props.navigation.dispatch(resetToHome)
-            }
-            else
-            {
-             this.props.navigation.dispatch(resetToLogin)
+            } else {
+                firebase.auth().onAuthStateChanged((user) => {
+                    if (user) 
+                    {
+                        this.props.navigation.dispatch(resetToHome)
+                    }
+                    else
+                    {
+                        this.props.navigation.dispatch(resetToLogin)
+                    }
+                })
             }
         })
+
     }
     componentDidMount() {    
         this.loadSplash()    
