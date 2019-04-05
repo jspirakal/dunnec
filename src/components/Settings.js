@@ -30,38 +30,6 @@ class Settings extends Component {
         })
     }
 
-    renderLogoutButton(){
-        let u =  AsyncStorage.getItem('fb-user');
-            if(u){
-                return (
-                    <LoginButton
-                        onLogoutFinished = {() => {
-                        AsyncStorage.removeItem('fb-user');
-                        this.props.navigation.dispatch(resetToLogin)
-                        }}
-                    />
-                )
-            } else{
-                return (
-                <ListItem
-                    title="Sign Out"
-                    onPress= {()=> { 
-                        LoginManager.logOut()
-                        firebase.auth().signOut().then( ()=> {
-                            this.props.navigation.dispatch(resetToLogin)
-                            AsyncStorage.removeItem('fb-user');
-                        }, function(error) {
-            
-                            alert(error.mesage)
-                        }) 
-                    }}
-                    rightIcon={{ name: 'cancel' }}
-                />
-                )
-
-            }
-    }
-
     render() {
         return (
             <ScrollView>
@@ -77,8 +45,7 @@ class Settings extends Component {
                     />
                 </List>
                 <List>
-                {
-                    this.state.user != null ? 
+                    {/* this.state.user != null ? 
                     (
                     <LoginButton
                         onLogoutFinished = {() => {
@@ -86,23 +53,18 @@ class Settings extends Component {
                         this.props.navigation.dispatch(resetToLogin)
                         }}
                     />
-                ) : (
+                ) : ( */}
                 <ListItem
                     title="Sign Out"
                     onPress= {()=> { 
-                        LoginManager.logOut()
                         firebase.auth().signOut().then( ()=> {
-                            this.props.navigation.dispatch(resetToLogin)
-                            AsyncStorage.removeItem('fb-user');
                         }, function(error) {
-            
                             alert(error.mesage)
                         }) 
                     }}
                     rightIcon={{ name: 'cancel' }}
                 />
-                )
-                }
+                {/* ) */}
                 </List>
             </ScrollView>
         );

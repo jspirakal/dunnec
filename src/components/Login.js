@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 
 import { StyleSheet, TextInput, View, Alert, Button, Text} from 'react-native';
 
-// Importing Stack Navigator library to add multiple activities.
-import { StackNavigator } from 'react-navigation';
-import { createStackNavigator, createAppContainer } from  'react-navigation';
 
 
 // Creating Login .

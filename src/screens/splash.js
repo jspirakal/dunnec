@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import firebase from 'firebase'
 
-import { View, AsyncStorage, StatusBar, Image } from 'react-native';
+import { View } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 
 const resetToHome = StackActions.reset({
@@ -25,10 +25,10 @@ export default class Splash extends Component {
     }
 
     loadSplash(){
-        AsyncStorage.getItem('fb-user').then(u=>{
-            if(u){
-                this.props.navigation.dispatch(resetToHome)
-            } else {
+        // AsyncStorage.getItem('fb-user').then(u=>{
+        //     if(u){
+        //         this.props.navigation.dispatch(resetToHome)
+        //     } else {
                 firebase.auth().onAuthStateChanged((user) => {
                     if (user) 
                     {
@@ -39,8 +39,8 @@ export default class Splash extends Component {
                         this.props.navigation.dispatch(resetToLogin)
                     }
                 })
-            }
-        })
+        //     }
+        // })
 
     }
     componentDidMount() {    

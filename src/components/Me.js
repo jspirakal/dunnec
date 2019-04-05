@@ -2,11 +2,35 @@ import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import { Tile, List, ListItem, Button } from 'react-native-elements';
 import { me } from '../config/data';
-
+import firebase from 'firebase'
 class Me extends Component {
+
+    constructor(props){
+        super(props);
+        this.state={
+            user:{
+                displayName:'Not Defined',
+                email:'Not Defined',
+                phoneNumber:'Not Defined'
+            }
+        }
+    }
+
     handleSettingsPress = () => {
         this.props.navigation.navigate('Settings');
     };
+
+    componentWillMount(){
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) 
+            {
+                console.log(user.displayName)
+                this.setState({user:user})
+            }else{
+                this.setState({user:{}})
+            }
+        })
+    }
 
     render() {
         console.log(this.props)
@@ -16,9 +40,9 @@ class Me extends Component {
                     // Commmented the image src out because its expecting an image when pushed to this screen 
                     //  but nothing is passed. Only uncomment if you are sure of passing data here to this screen
                     // imageSrc={{ uri: this.props.picture.large}}
-                    featured
-                    title={`${this.props.name.first.toUpperCase()} ${this.props.name.last.toUpperCase()}`}
-                    caption={this.props.email}
+                    // featured
+                    // title={`${this.state.user.displayName.toUpperCase()} ${this.props.name.last.toUpperCase()}`}
+                    // caption={this.state.user.displayName}
                 />
 
                 <Button
@@ -30,12 +54,12 @@ class Me extends Component {
                 <List>
                     <ListItem
                         title="Email"
-                        rightTitle={this.props.email}
+                        rightTitle={this.state.user.email}
                         hideChevron
                     />
                     <ListItem
                         title="Phone"
-                        rightTitle={this.props.phone}
+                        rightTitle={this.state.user.phoneNumber === null ? 'Not Defined' : this.state.user.phoneNumber }
                         hideChevron
                     />
                 </List>
@@ -43,7 +67,8 @@ class Me extends Component {
                 <List>
                     <ListItem
                         title="Username"
-                        rightTitle={this.props.login.username}
+                        // rightTitle={'Not Defined'}
+                        rightTitle={this.state.user.displayName }
                         hideChevron
                     />
                 </List>

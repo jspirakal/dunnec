@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, AsyncStorage, TouchableOpacity, Text, Image} from 'react-native';
+import { StyleSheet, View, AsyncStorage, ScrollView, TouchableOpacity, Text, Image} from 'react-native';
 import InputField from "../../components/InputField";
 import {w, h, totalSize} from '../../api/Dimensions';
 import GetStarted from './GetStarted';
@@ -30,30 +30,36 @@ export default class Login extends Component {
     isLogin: false,
   };
   
-  onLoginFacebook = () => {
+    async facebookLogin() {
+      try {
+        const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email']);
     
-    LoginManager.logInWithReadPermissions(['public_profile']).then(
-      (result) => {
         if (result.isCancelled) {
-          alert('Login was cancelled');
-        } else {
-          console.log(result);
-          AccessToken.getCurrentAccessToken().then(
-            (data) => {
-              if(data) {
-                AsyncStorage.setItem('fb-user',data.accessToken);
-                console.log(this.props)
-                this.props.navigation.dispatch(resetToHome)
-               }
-            })
+          // handle this however suites the flow of your app
+          throw new Error('User cancelled request'); 
         }
-      },
-      (error) => {
-        alert('Login failed with error: ' + error);
+    
+        console.log(`Login success with permissions: ${result.grantedPermissions.toString()}`);
+    
+        // get the access token
+        const data = await AccessToken.getCurrentAccessToken();
+    
+        if (!data) {
+          // handle this however suites the flow of your app
+          throw new Error('Something went wrong obtaining the users access token');
+        }
+    
+        // create a new firebase credential with the token
+        const credential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+    
+        // login with credential
+        const firebaseUserCredential = await firebase.auth().signInWithCredential(credential);
+    
+        console.warn(JSON.stringify(firebaseUserCredential.user))
+      } catch (e) {
+        alert(e);
       }
-    );
-  }
-
+    }
 
   getStarted = () => {
     const email = this.email.getInputValue();
@@ -93,7 +99,8 @@ export default class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image style={styles.icon} resizeMode="contain" source={companyLogo}/>
+      <ScrollView contentContainerStyle={[styles.scrollContainer]} >
+      <Image style={styles.icon} resizeMode="contain" source={companyLogo}/>
         <InputField
           placeholder="Email"
           keyboardType="email-address"
@@ -122,7 +129,7 @@ export default class Login extends Component {
             <Text style={styles.createAccount}>Create Account</Text>
           </TouchableOpacity>
          
-          <TouchableOpacity onPress={this.onLoginFacebook.bind(this)} style={styles.touchable} activeOpacity={0.6}>
+          <TouchableOpacity onPress={this.facebookLogin.bind(this)} style={styles.touchable} activeOpacity={0.6}>
             <Text style={styles.facebookLogin}>Login With Facebook</Text>
           </TouchableOpacity>
         
@@ -131,6 +138,7 @@ export default class Login extends Component {
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
+      </ScrollView>
       </View>
     )
   }
@@ -141,16 +149,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  scrollContainer: {
+    justifyContent:'center',
+    alignItems:'center'
+  },
   icon: {
     width: w(70),
     height: h(30),
-    marginTop: h(10),
-    marginBottom: h(7),
+    marginTop: h(5),
+    marginBottom: h(2),
   },
   textContainer: {
     width: w(100),
     flexDirection: 'row',
     marginTop: h(5),
+    marginBottom: 20,
   },
   email: {
     marginBottom: h(4.5),
